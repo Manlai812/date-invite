@@ -8,12 +8,13 @@
   <style>
     body {
       margin: 0;
-      font-family: Arial;
+      font-family: Arial, sans-serif;
       background: linear-gradient(135deg, #ffd6e7, #ffeccf);
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
+      padding: 20px;
     }
 
     .card {
@@ -28,6 +29,7 @@
     h1 {
       text-align: center;
       color: #d63384;
+      margin-top: 0;
     }
 
     .subtitle {
@@ -37,17 +39,38 @@
     }
 
     label {
-      margin-top: 10px;
+      margin-top: 12px;
       display: block;
       font-weight: bold;
     }
 
-    input, select, textarea {
+    input[type="text"],
+    select,
+    textarea {
       width: 100%;
       padding: 10px;
       margin-top: 5px;
       border-radius: 10px;
       border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    .radio-group {
+      margin-top: 8px;
+      margin-bottom: 10px;
+    }
+
+    .radio-group label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: normal;
+      margin-top: 8px;
+    }
+
+    .radio-group input[type="radio"] {
+      width: auto;
+      margin: 0;
     }
 
     button {
@@ -60,6 +83,7 @@
       color: white;
       font-weight: bold;
       cursor: pointer;
+      font-size: 16px;
     }
 
     button:hover {
@@ -79,111 +103,100 @@
     }
   </style>
 </head>
-
 <body>
 
-<div class="card">
-  <h1>💌 A Small Question For You</h1>
-  <p class="subtitle">I made this little page just for you 💖</p>
+  <div class="card">
+    <h1>💌 A Small Question For You</h1>
+    <p class="subtitle">I made this little page just for you 💖</p>
 
-  <form id="dateForm"
-        action="https://formspree.io/f/xkoqdkvn"
-        method="POST">
+    <form id="dateForm" action="https://formspree.io/f/xkoqdkvn" method="POST">
+      <input type="hidden" name="_subject" value="New Date Answer 💌">
 
-    <!-- NAME -->
-    <label>Your name</label>
-    <input type="text" name="name" required>
+      <label for="name">Your name</label>
+      <input type="text" id="name" name="name" required>
 
-    <!-- EMAIL (IMPORTANT FIX) -->
-  <form id="dateForm"
-      action="https://formspree.io/f/xkoqdkvn"
-      method="POST">
+      <label>Do you want to go on a date with me?</label>
+      <div class="radio-group">
+        <label><input type="radio" name="answer" value="Yes" required> Yes</label>
+        <label><input type="radio" name="answer" value="No"> No</label>
+      </div>
 
-  <input type="hidden" name="_subject" value="New Date Answer 💌">
-</form>
+      <label for="time">When are you available?</label>
+      <input type="text" id="time" name="time" required>
 
-    <!-- YES / NO -->
-    <label>Do you want to go on a date with me?</label>
-    <input type="radio" name="answer" value="Yes" required> Yes
-    <input type="radio" name="answer" value="No"> No
+      <label for="place">Which place sounds nicest?</label>
+      <select id="place" name="place">
+        <option value="Park 🌳">Park 🌳</option>
+        <option value="Arcade 🎮">Arcade 🎮</option>
+        <option value="Billiard 🎱">Billiard 🎱</option>
+        <option value="Tennis 🎾 (Teach me)">Tennis 🎾 (Teach me)</option>
+        <option value="other">Other</option>
+      </select>
 
-    <!-- TIME -->
-    <label>When are you available?</label>
-    <input type="text" name="time" required>
+      <input type="text" id="otherPlace" name="other_place" placeholder="Your idea..." class="hidden">
 
-    <!-- PLACE -->
-    <label>Which place sounds nicest?</label>
-    <select id="place" name="place">
-      <option>Park 🌳</option>
-      <option>Arcade 🎮</option>
-      <option>Billiard 🎱</option>
-      <option>Tennis 🎾 (Teach me)</option>
-      <option value="other">Other</option>
-    </select>
+      <label for="food">What would you like?</label>
+      <select id="food" name="food">
+        <option value="Coffee ☕">Coffee ☕</option>
+        <option value="Pizza 🍕">Pizza 🍕</option>
+        <option value="Burger 🍔">Burger 🍔</option>
+        <option value="Ice cream 🍨">Ice cream 🍨</option>
+        <option value="Cake 🍰">Cake 🍰</option>
+        <option value="other">Other</option>
+      </select>
 
-    <input type="text" id="otherPlace" name="other_place"
-           placeholder="Your idea..." class="hidden">
+      <input type="text" id="otherFood" name="other_food" placeholder="Your choice..." class="hidden">
 
-    <!-- FOOD -->
-    <label>What would you like?</label>
-    <select id="food" name="food">
-      <option>Coffee ☕</option>
-      <option>Pizza 🍕</option>
-      <option>Burger 🍔</option>
-      <option>Ice cream 🍨</option>
-      <option>Cake 🍰</option>
-      <option value="other">Other</option>
-    </select>
+      <label for="message">Any message for me?</label>
+      <textarea id="message" name="message"></textarea>
 
-    <input type="text" id="otherFood" name="other_food"
-           placeholder="Your choice..." class="hidden">
+      <button type="submit">Submit 💖</button>
 
-    <!-- MESSAGE -->
-    <label>Any message for me?</label>
-    <textarea name="message"></textarea>
+      <div class="success" id="successMsg">
+        💖 Thank you! I got your answer!
+      </div>
+    </form>
+  </div>
 
-    <button type="submit">Submit 💖</button>
+  <script>
+    const form = document.getElementById("dateForm");
+    const successMsg = document.getElementById("successMsg");
+    const place = document.getElementById("place");
+    const food = document.getElementById("food");
+    const otherPlace = document.getElementById("otherPlace");
+    const otherFood = document.getElementById("otherFood");
 
-    <div class="success" id="successMsg">
-      💖 Thank you! I got your answer!
-    </div>
+    place.addEventListener("change", function () {
+      otherPlace.classList.toggle("hidden", this.value !== "other");
+    });
 
-  </form>
-</div>
+    food.addEventListener("change", function () {
+      otherFood.classList.toggle("hidden", this.value !== "other");
+    });
 
-<script>
-const form = document.getElementById("dateForm");
-const successMsg = document.getElementById("successMsg");
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
 
-document.getElementById("place").addEventListener("change", function() {
-  document.getElementById("otherPlace").classList.toggle("hidden", this.value !== "other");
-});
+      const data = new FormData(form);
 
-document.getElementById("food").addEventListener("change", function() {
-  document.getElementById("otherFood").classList.toggle("hidden", this.value !== "other");
-});
+      const response = await fetch(form.action, {
+        method: "POST",
+        body: data,
+        headers: {
+          "Accept": "application/json"
+        }
+      });
 
-form.addEventListener("submit", async function(e) {
-  e.preventDefault();
-
-  const data = new FormData(form);
-
-  const response = await fetch(form.action, {
-    method: "POST",
-    body: data,
-    headers: {
-      "Accept": "application/json"
-    }
-  });
-
-  if (response.ok) {
-    form.reset();
-    successMsg.style.display = "block";
-  } else {
-    alert("Something went wrong. Please try again.");
-  }
-});
-</script>
+      if (response.ok) {
+        form.reset();
+        otherPlace.classList.add("hidden");
+        otherFood.classList.add("hidden");
+        successMsg.style.display = "block";
+      } else {
+        alert("Something went wrong. Please try again.");
+      }
+    });
+  </script>
 
 </body>
 </html>
