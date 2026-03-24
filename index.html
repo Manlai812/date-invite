@@ -15,6 +15,7 @@
       align-items: center;
       min-height: 100vh;
       padding: 20px;
+      box-sizing: border-box;
     }
 
     .card {
@@ -53,6 +54,7 @@
       border-radius: 10px;
       border: 1px solid #ccc;
       box-sizing: border-box;
+      font-size: 16px;
     }
 
     .radio-group {
@@ -93,14 +95,6 @@
     .hidden {
       display: none;
     }
-
-    .success {
-      display: none;
-      text-align: center;
-      margin-top: 15px;
-      color: green;
-      font-weight: bold;
-    }
   </style>
 </head>
 <body>
@@ -109,8 +103,9 @@
     <h1>💌 A Small Question For You</h1>
     <p class="subtitle">I made this little page just for you 💖</p>
 
-    <form id="dateForm" action="https://formspree.io/f/xkoqdkvn" method="POST">
+    <form action="https://formspree.io/f/xkoqdkvn" method="POST">
       <input type="hidden" name="_subject" value="New Date Answer 💌">
+      <input type="hidden" name="_captcha" value="false">
 
       <label for="name">Your name</label>
       <input type="text" id="name" name="name" required>
@@ -151,16 +146,10 @@
       <textarea id="message" name="message"></textarea>
 
       <button type="submit">Submit 💖</button>
-
-      <div class="success" id="successMsg">
-        💖 Thank you! I got your answer!
-      </div>
     </form>
   </div>
 
   <script>
-    const form = document.getElementById("dateForm");
-    const successMsg = document.getElementById("successMsg");
     const place = document.getElementById("place");
     const food = document.getElementById("food");
     const otherPlace = document.getElementById("otherPlace");
@@ -172,29 +161,6 @@
 
     food.addEventListener("change", function () {
       otherFood.classList.toggle("hidden", this.value !== "other");
-    });
-
-    form.addEventListener("submit", async function (e) {
-      e.preventDefault();
-
-      const data = new FormData(form);
-
-      const response = await fetch(form.action, {
-        method: "POST",
-        body: data,
-        headers: {
-          "Accept": "application/json"
-        }
-      });
-
-      if (response.ok) {
-        form.reset();
-        otherPlace.classList.add("hidden");
-        otherFood.classList.add("hidden");
-        successMsg.style.display = "block";
-      } else {
-        alert("Something went wrong. Please try again.");
-      }
     });
   </script>
 
