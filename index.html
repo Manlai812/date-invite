@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Date Invite 💌</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #ffd6e7, #ffeccf);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 650px;
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    h1 {
+      margin-top: 0;
+      text-align: center;
+      color: #d63384;
+      font-size: 2rem;
+    }
+
+    p.subtitle {
+      text-align: center;
+      color: #555;
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin-top: 16px;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    input[type="text"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      font-size: 1rem;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 110px;
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 20px;
+      margin-top: 8px;
+    }
+
+    .radio-group label {
+      font-weight: normal;
+      margin: 0;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 24px;
+      padding: 14px;
+      border: none;
+      border-radius: 14px;
+      background: #ff4d88;
+      color: white;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #e63e77;
+    }
+
+    .note {
+      margin-top: 15px;
+      font-size: 0.92rem;
+      color: #666;
+      text-align: center;
+    }
+
+    .success-box {
+      display: none;
+      margin-top: 20px;
+      padding: 14px;
+      border-radius: 12px;
+      background: #e9fff1;
+      color: #1d6b3b;
+      text-align: center;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>💌 A Small Question For You</h1>
+    <p class="subtitle">I made this little page just for you.</p>
+
+    <form
+      id="dateForm"
+      action="https://formspree.io/f/YOUR_FORMSPREE_ENDPOINT"
+      method="POST"
+    >
+      <label for="name">Your name</label>
+      <input type="text" id="name" name="name" required />
+
+      <label>Do you want to go on a date with me?</label>
+      <div class="radio-group">
+        <label><input type="radio" name="answer" value="Yes" required /> Yes</label>
+        <label><input type="radio" name="answer" value="No" /> No</label>
+      </div>
+
+      <label for="time">When are you available?</label>
+      <input type="text" id="time" name="available_time" placeholder="Example: Friday evening" required />
+
+      <label for="place">Which place sounds nicest for a date?</label>
+      <select id="place" name="date_place" required>
+        <option value="">Choose a place</option>
+        <option value="Park 🌳">Park 🌳</option>
+        <option value="Arcade 🎮">Arcade 🎮</option>
+        <option value="Billiard 🎱">Billiard 🎱</option>
+        <option value="Tennis 🎾 (Teach me)">Tennis 🎾 (Teach me)</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <div id="otherPlaceWrap" class="hidden">
+        <label for="otherPlace">Write your own place</label>
+        <input type="text" id="otherPlace" name="other_place" />
+      </div>
+
+      <label for="food">What would you like to have?</label>
+      <select id="food" name="food_or_drink" required>
+        <option value="">Choose food or drink</option>
+        <option value="Coffee ☕">Coffee ☕</option>
+        <option value="Pizza 🍕">Pizza 🍕</option>
+        <option value="Burger 🍔">Burger 🍔</option>
+        <option value="Ice cream 🍨">Ice cream 🍨</option>
+        <option value="Cake 🍰">Cake 🍰</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <div id="otherFoodWrap" class="hidden">
+        <label for="otherFood">Write your own food or drink</label>
+        <input type="text" id="otherFood" name="other_food" />
+      </div>
+
+      <label for="message">Any message or feedback for me?</label>
+      <textarea id="message" name="message_feedback" placeholder="Write anything you want..."></textarea>
+
+      <input type="hidden" name="_subject" value="New Date Invite Response 💌" />
+      <input type="hidden" name="_captcha" value="false" />
+
+      <button type="submit">Submit 💖</button>
+    </form>
+
+    <div id="successBox" class="success-box">
+      Your answer was submitted 💖
+    </div>
+
+    <div class="note">
+      Thank you for answering honestly ✨
+    </div>
+  </div>
+
+  <script>
+    const placeSelect = document.getElementById("place");
+    const foodSelect = document.getElementById("food");
+    const otherPlaceWrap = document.getElementById("otherPlaceWrap");
+    const otherFoodWrap = document.getElementById("otherFoodWrap");
+    const otherPlaceInput = document.getElementById("otherPlace");
+    const otherFoodInput = document.getElementById("otherFood");
+    const form = document.getElementById("dateForm");
+    const successBox = document.getElementById("successBox");
+
+    placeSelect.addEventListener("change", function () {
+      if (this.value === "Other") {
+        otherPlaceWrap.classList.remove("hidden");
+        otherPlaceInput.required = true;
+      } else {
+        otherPlaceWrap.classList.add("hidden");
+        otherPlaceInput.required = false;
+        otherPlaceInput.value = "";
+      }
+    });
+
+    foodSelect.addEventListener("change", function () {
+      if (this.value === "Other") {
+        otherFoodWrap.classList.remove("hidden");
+        otherFoodInput.required = true;
+      } else {
+        otherFoodWrap.classList.add("hidden");
+        otherFoodInput.required = false;
+        otherFoodInput.value = "";
+      }
+    });
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const data = new FormData(form);
+
+      const response = await fetch(form.action, {
+        method: "POST",
+        body: data,
+        headers: {
+          "Accept": "application/json"
+        }
+      });
+
+      if (response.ok) {
+        form.reset();
+        otherPlaceWrap.classList.add("hidden");
+        otherFoodWrap.classList.add("hidden");
+        successBox.style.display = "block";
+      } else {
+        alert("Something went wrong. Please try again.");
+      }
+    });
+  </script>
+</body>
+</html>
